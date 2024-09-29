@@ -4,7 +4,7 @@ import com.auth.bme.chess.ai_engine.board.BoardData
 import ai_engine.board.BoardLogic
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
-import ai_engine.board.pieces.peice_interface.Piece
+import ai_engine.board.pieces.Piece
 import kotlin.math.max
 import kotlin.math.min
 

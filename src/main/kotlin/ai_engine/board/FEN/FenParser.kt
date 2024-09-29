@@ -5,7 +5,7 @@ import ai_engine.board.pieces.*
 import ai_engine.util.CastlingRights
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.Side
-import ai_engine.board.pieces.peice_interface.Piece
+import ai_engine.board.pieces.Piece
 
 /**
  * This class provides functions for parsing FEN strings

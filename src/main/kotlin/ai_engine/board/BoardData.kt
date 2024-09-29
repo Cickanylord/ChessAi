@@ -11,7 +11,7 @@ import ai_engine.board.FEN.FenParser.activeColor
 import ai_engine.board.FEN.FenParser.castlingRights
 import ai_engine.board.FEN.FenParser.piecePlacement
 import ai_engine.board.pieces.King
-import ai_engine.board.pieces.peice_interface.Piece
+import ai_engine.board.pieces.Piece
 import ai_engine.board.pieces.TileNew
 import kotlin.math.absoluteValue
 

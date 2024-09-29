@@ -3,7 +3,6 @@ package ai_engine.board.pieces
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
 import ai_engine.board.pieces.enums.Side
-import ai_engine.board.pieces.peice_interface.Piece
 
 
 data class Knight(

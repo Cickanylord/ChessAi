@@ -5,7 +5,7 @@ import com.auth.bme.chess.ai_engine.board.BoardData
 import com.auth.bme.chess.ai_engine.board.cordinate
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
-import ai_engine.board.pieces.peice_interface.Piece
+import ai_engine.board.pieces.Piece
 
 
 import kotlin.math.absoluteValue
@@ -109,8 +109,9 @@ class BoardLogic(val board: BoardData) {
                         return@filter false
                     }
                 }
+                true
                 //scans if the king is in check after movement
-                !scanBoardForCheck(piece.pieceColor, tmpBoard)
+                //!scanBoardForCheck(piece.pieceColor, tmpBoard)
         } as MutableList<Pair<Int, Int>>
     }
 
@@ -138,7 +139,7 @@ class BoardLogic(val board: BoardData) {
                     }
 
                     //add en passant move if possible
-                    if(PieceName.PAWN == piece.name && currentField == BoardCoordinates.getCoordinate(board.possibleEnPassantTargets)) { final.add(currentField) }
+                    if (PieceName.PAWN == piece.name && currentField == BoardCoordinates.getCoordinate(board.possibleEnPassantTargets)) { final.add(currentField) }
 
                     if (piece.name != PieceName.PAWN || currentField.second == piece.j) { final.add(currentField) }
 
