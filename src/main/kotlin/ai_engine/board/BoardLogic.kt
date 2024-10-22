@@ -1,8 +1,6 @@
 package ai_engine.board
 
-import ai_engine.ai.NewAI
-import com.auth.bme.chess.ai_engine.board.BoardData
-import com.auth.bme.chess.ai_engine.board.cordinate
+import ai_engine.ai.ChessAI
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
 import ai_engine.board.pieces.Piece
@@ -40,23 +38,23 @@ fun main() {
     cordinate()
     val king = board.board.getPiece(6,0)!!
    // println(board.getLegalMoves(king))
-    println(boardData.fen.toString())
+    println(boardData.toString())
     println( board.getLegalMoves(king))
     //board.move(king, Pair(2,2))
     println(boardData.printBoard())
 
     //board.move(board.board.getPiece(6,7), Pair(4,7))
-    println(boardData.fen.toString())
+    println(boardData.toString())
 
 
 
     var color = PieceColor.WHITE
 
     while (true) {
-        val ai = NewAI(color ,boardData)
+        val ai = ChessAI(color ,boardData)
         val nextStep = ai.getTheNextStep()
         println(nextStep)
-        println(boardData.fen.toString())
+        println(boardData.toString())
         board.move(nextStep.first, nextStep.second)
         println(boardData.printBoard())
         color = color.oppositeColor()
@@ -99,7 +97,7 @@ class BoardLogic(val board: BoardData) {
             .filter { pos ->
 
                 //init new board to check if the king is in check.
-                val tmpBoard = BoardLogic(BoardData(board.fen.toString()))
+                val tmpBoard = BoardLogic(BoardData(board.toString()))
                 tmpBoard.board.movePiece(tmpBoard.board.getPiece(piece.position),pos)
 
                 //if the king in check it can't castle.
@@ -109,9 +107,8 @@ class BoardLogic(val board: BoardData) {
                         return@filter false
                     }
                 }
-                true
                 //scans if the king is in check after movement
-                //!scanBoardForCheck(piece.pieceColor, tmpBoard)
+                !scanBoardForCheck(piece.pieceColor, tmpBoard)
         } as MutableList<Pair<Int, Int>>
     }
 
@@ -121,7 +118,7 @@ class BoardLogic(val board: BoardData) {
      * @param piece the piece which moves are getting calculated
      * @param final the list of the visible fields
      */
-    fun getPieceVision(piece: Piece, final: MutableList<Pair<Int, Int>>) {
+    private fun getPieceVision(piece: Piece, final: MutableList<Pair<Int, Int>>) {
         piece.getAllMoves().forEach {
             for (i in it.indices) {
                 val currentField = it[i]
@@ -223,8 +220,6 @@ class BoardLogic(val board: BoardData) {
                             board.castlingRights.kb = false
                             board.castlingRights.qb = false
                         }
-
-                        else -> throw IllegalArgumentException("no such color")
                     }
                 }
             }
@@ -238,7 +233,7 @@ class BoardLogic(val board: BoardData) {
      * @return true if the castling move is not legal and return false if the move is legal
      */
 
-    fun removeInvalidCastling(piece: Piece, fieldPos: Pair<Int, Int>): Boolean {
+    private fun removeInvalidCastling(piece: Piece, fieldPos: Pair<Int, Int>): Boolean {
         val rights = board.castlingRights
         //QueenSide
         if (fieldPos.second == piece.j - 2) {
@@ -256,7 +251,6 @@ class BoardLogic(val board: BoardData) {
             return when (piece.pieceColor) {
                 PieceColor.WHITE -> { rights.qw.not() }
                 PieceColor.BLACK -> { rights.qb.not() }
-                else -> throw IllegalArgumentException("no such color")
             }
         }
         //KingSideCastling
@@ -269,7 +263,6 @@ class BoardLogic(val board: BoardData) {
             return when(piece.pieceColor) {
                 PieceColor.WHITE -> { rights.kw.not() }
                 PieceColor.BLACK -> { rights.kb.not() }
-                else -> throw IllegalArgumentException("no such color")
             }
         }
         return false
@@ -284,7 +277,7 @@ class BoardLogic(val board: BoardData) {
      *
      * @return if the king gets in check returns true
      */
-    fun scanBoardForCheck(color: PieceColor, boardLogic: BoardLogic = this): Boolean {
+    private fun scanBoardForCheck(color: PieceColor, boardLogic: BoardLogic = this): Boolean {
         // Get the position of the king for the current player
         val kingPosition = boardLogic.board.getKing(color).position
 
@@ -318,7 +311,7 @@ class BoardLogic(val board: BoardData) {
     fun removeMovesResultingInCheck(piece: Piece, final: MutableList<Pair<Int, Int>>) {
         val shouldRemove: MutableList<Pair<Int, Int>> = mutableListOf()
         final.forEach { pos->
-            val tmpBoard = BoardLogic(BoardData(board.fen.toString()))
+            val tmpBoard = BoardLogic(BoardData(board.toString()))
             tmpBoard.board.movePiece(tmpBoard.board.getPiece(piece.position), pos)
             if (scanBoardForCheck(piece.pieceColor, tmpBoard)) {
                 shouldRemove.add(pos)

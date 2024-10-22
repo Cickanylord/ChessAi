@@ -1,6 +1,6 @@
 package ai_engine.board.FEN
 
-import com.auth.bme.chess.ai_engine.board.BoardData
+import ai_engine.board.BoardData
 
 data class Fen(val boardData: BoardData) {
     val activeColor: Char

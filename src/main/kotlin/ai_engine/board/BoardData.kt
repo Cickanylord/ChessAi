@@ -1,8 +1,5 @@
-package com.auth.bme.chess.ai_engine.board
+package ai_engine.board
 
-
-import ai_engine.board.BoardCoordinates
-import ai_engine.board.BoardLogic
 import ai_engine.util.CastlingRights
 import ai_engine.board.FEN.Fen
 import ai_engine.board.pieces.enums.PieceColor
@@ -14,32 +11,6 @@ import ai_engine.board.pieces.King
 import ai_engine.board.pieces.Piece
 import ai_engine.board.pieces.TileNew
 import kotlin.math.absoluteValue
-
-
-fun main() {
-//val board = BoardData()
-
-    BoardData("rnbqk2r/pppp1ppp/4pn2/2b5/3P4/4PN2/PPP2PPP/RNBQKB1R w KQkq - 0 1").let {
-        println(it.fen)
-
-
-        /*
-        println(it.printBoard())
-        println()
-        it.flipTheTable()
-        println(it.printBoard())
-        println(it.fen)
-
-         */
-
-    }
-    //board.cleanTheBoard()
-    //println(Fen().createFEN(board))
-    //println(board.printBoard())
-    //Fen(board).let { println(it.printFen()) }
-}
-
-
 /**
  * this class represents the state of the board and provides methods to manipulate the board
  *
@@ -47,9 +18,9 @@ fun main() {
  * @author Waldmann Tamás(EO229S)
  */
 
-data class BoardData(val fenString: String) {
+class BoardData(fenString: String) {
     /** the fen generator for the Board*/
-    var fen: Fen
+    private var fen: Fen
 
     var possibleEnPassantTargets = "-"
 
@@ -335,6 +306,10 @@ data class BoardData(val fenString: String) {
             boardString += "\n"
         }
         return boardString
+    }
+
+    override fun toString(): String {
+        return fen.toString()
     }
 }
 

@@ -62,7 +62,7 @@ class Ai(var board: Board, color: PieceColor) {
     }
 
     fun aiPawnPos( pair: Pair<Int, Int>): Int {
-        val pawnposai = arrayOf(
+        val pawnPosai = arrayOf(
             intArrayOf(0, 0, 0, 0, 0, 0, 0, 0),
             intArrayOf(0, 0, 0, -5, -5, 0, 0, 0),
             intArrayOf(0, 2, 3, 4, 4, 3, 2, 0),
@@ -72,7 +72,7 @@ class Ai(var board: Board, color: PieceColor) {
             intArrayOf(5, 10, 15, 20, 20, 15, 10, 5),
             intArrayOf(0, 0, 0, 0, 0, 0, 0, 0)
         )
-        return pawnposai[pair.first][pair.second]
+        return pawnPosai[pair.first][pair.second]
     }
 
     fun rookpose( pair: Pair<Int, Int>): Int {
