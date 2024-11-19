@@ -2,7 +2,7 @@ package ai_engine.board.pieces
 
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
-import ai_engine.board.pieces.enums.Side
+
 
 interface  Piece  {
     fun step(i: Int, j: Int)
@@ -13,7 +13,7 @@ interface  Piece  {
     val name: PieceName
     var position: Pair<Int, Int>
     var hasMoved: Boolean
-    var side: Side
+
     var i: Int
     var j: Int
 

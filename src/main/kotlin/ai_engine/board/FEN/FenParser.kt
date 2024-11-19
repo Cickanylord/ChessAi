@@ -4,7 +4,6 @@ package ai_engine.board.FEN
 import ai_engine.board.pieces.*
 import ai_engine.util.CastlingRights
 import ai_engine.board.pieces.enums.PieceColor
-import ai_engine.board.pieces.enums.Side
 import ai_engine.board.pieces.Piece
 
 /**
@@ -76,22 +75,22 @@ object FenParser {
      * @throws IllegalArgumentException if the fenChar is invalid
      */
     fun fenCharToPiece(fenChar: Char, i: Int, j: Int): Piece {
-        val side: Side
+
         val pieceColor = if(fenChar.isLowerCase()) {
-            side = Side.UP
+
             PieceColor.BLACK
         }
         else {
-            side = Side.DOWN
+
             PieceColor.WHITE
         }
         return when(fenChar) {
-            'q','Q' -> Queen(pieceColor, i, j, side)
-            'p','P' -> Pawn(pieceColor, i, j, side)
-            'b','B' -> Bishop(pieceColor, i, j, side)
-            'r','R' -> Rook(pieceColor, i, j, side)
-            'n','N' -> Knight(pieceColor, i, j, side)
-            'k','K' -> King(pieceColor, i, j, side)
+            'q','Q' -> Queen(pieceColor, i, j)
+            'p','P' -> Pawn(pieceColor, i, j)
+            'b','B' -> Bishop(pieceColor, i, j)
+            'r','R' -> Rook(pieceColor, i, j)
+            'n','N' -> Knight(pieceColor, i, j)
+            'k','K' -> King(pieceColor, i, j)
 
             else -> {throw IllegalArgumentException("Invalid FEN character: $fenChar")}
         }

@@ -2,14 +2,12 @@ package ai_engine.board.pieces
 
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
-import ai_engine.board.pieces.enums.Side
 
 
 data class Rook(
     override var pieceColor: PieceColor,
     override var i: Int,
     override var j: Int,
-    override var side: Side,
     override var hasMoved: Boolean = false
 ) : Piece {
 
@@ -27,13 +25,6 @@ data class Rook(
         i = 7 - i
         j = 7 - j
         this.position = Pair(i,j)
-
-        side = if (side== Side.DOWN) {
-            Side.UP
-        } else {
-            Side.DOWN
-        }
-
     }
 
     override fun getAllMoves(): Array<MutableList<Pair<Int, Int>>>{

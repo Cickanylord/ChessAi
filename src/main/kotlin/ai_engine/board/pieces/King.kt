@@ -3,14 +3,13 @@ package ai_engine.board.pieces
 
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
-import ai_engine.board.pieces.enums.Side
+
 
 
 data class King(
     override var pieceColor: PieceColor,
     override var i: Int,
     override var j: Int,
-    override var side: Side,
     override var hasMoved: Boolean = false
 ) : Piece {
 
@@ -31,11 +30,6 @@ data class King(
         j = 7 - j
         this.position = Pair(i,j)
 
-        side = if (side== Side.DOWN) {
-            Side.UP
-        } else {
-            Side.DOWN
-        }
     }
 
     override fun getAllMoves(): Array<MutableList<Pair<Int, Int>>> {
@@ -50,7 +44,7 @@ data class King(
         steps[6].add(Pair(i - 1, j - 1))
         steps[7].add(Pair(i - 1, j + 1))
         //Castling
-        val castlingRow = if (side == Side.UP) 0 else 7
+        val castlingRow = if (pieceColor == PieceColor.BLACK) 0 else 7
 
         steps[8].add(Pair(castlingRow, j + 2))
         steps[9].add(Pair(castlingRow, j - 2))
