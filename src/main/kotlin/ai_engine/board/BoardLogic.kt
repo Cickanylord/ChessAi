@@ -1,6 +1,7 @@
 package ai_engine.board
 
 import ai_engine.ai.ChessAI
+import ai_engine.board.BoardCoordinates.getCoordinate
 import ai_engine.board.pieces.enums.PieceColor
 import ai_engine.board.pieces.enums.PieceName
 import ai_engine.board.pieces.Piece
@@ -118,8 +119,9 @@ class BoardLogic(val board: BoardData) {
      * @param piece the piece which moves are getting calculated
      * @param final the list of the visible fields
      */
-    private fun getPieceVision(piece: Piece, final: MutableList<Pair<Int, Int>>) {
-        piece.getAllMoves().forEach {
+    private fun getPieceVision(piece: Piece, final: MutableList<Pair<Int, Int>>, possibleMoves: Array<MutableList<Pair<Int, Int>>> = emptyArray()) {
+        val allMoves: Array<MutableList<Pair<Int, Int>>> = if(possibleMoves.isEmpty()) piece.getAllMoves() else possibleMoves
+        allMoves.forEach {
             for (i in it.indices) {
                 val currentField = it[i]
                 val currentPiece = board.getPiece(currentField.first, currentField.second)
@@ -136,7 +138,7 @@ class BoardLogic(val board: BoardData) {
                     }
 
                     //add en passant move if possible
-                    if (PieceName.PAWN == piece.name && currentField == BoardCoordinates.getCoordinate(board.possibleEnPassantTargets)) { final.add(currentField) }
+                    if (PieceName.PAWN == piece.name && currentField == getCoordinate(board.possibleEnPassantTargets)) { final.add(currentField) }
 
                     if (piece.name != PieceName.PAWN || currentField.second == piece.j) { final.add(currentField) }
 
@@ -190,7 +192,7 @@ class BoardLogic(val board: BoardData) {
                 }
 
                 //En Passant move
-                if(piece.name == PieceName.PAWN && move == BoardCoordinates.getCoordinate(board.possibleEnPassantTargets)) {
+                if(piece.name == PieceName.PAWN && move == getCoordinate(board.possibleEnPassantTargets)) {
                     when(piece.pieceColor) {
                         PieceColor.WHITE -> {
                             board.movePiece(null, move.copy(first = move.first + 1))
@@ -206,6 +208,7 @@ class BoardLogic(val board: BoardData) {
                 board.movePiece(piece, move)
                 board.activeColor = board.activeColor.oppositeColor()
 
+                //TODO Check if this is necessary
                 //updating the board after the piece movement
                 //setting castling rights after a movement on the board
                 //The king moves
@@ -286,10 +289,11 @@ class BoardLogic(val board: BoardData) {
 
         // Iterate through each opponent's piece
         for (piece in opponentPieces) {
+            val allMoves = piece.getAllMoves()
             // Check if the piece has any moves that can target the king
-            if (piece.getAllMoves().flatMap { it }.contains(kingPosition)) {
+            if (allMoves.flatMap { it }.contains(kingPosition)) {
                 val pieceVision = mutableListOf<Pair<Int, Int>>()
-                boardLogic.getPieceVision(piece, pieceVision)
+                boardLogic.getPieceVision(piece, pieceVision, allMoves)
 
                 // Check if the king's position is within the piece's vision
                 if (pieceVision.contains(kingPosition)) {
