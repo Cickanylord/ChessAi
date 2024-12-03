@@ -1,16 +1,16 @@
 package ai_engine.ai
 
-import ai_engine.ai.boardPositionValues.aiPawnPos
-import ai_engine.ai.boardPositionValues.bishopPositionValue
-import ai_engine.ai.boardPositionValues.bishopValue
-import ai_engine.ai.boardPositionValues.kingPos
-import ai_engine.ai.boardPositionValues.knightPositionValue
-import ai_engine.ai.boardPositionValues.knightValue
-import ai_engine.ai.boardPositionValues.pawnValue
-import ai_engine.ai.boardPositionValues.queenPos
-import ai_engine.ai.boardPositionValues.queenValue
-import ai_engine.ai.boardPositionValues.rookPos
-import ai_engine.ai.boardPositionValues.rookValue
+import ai_engine.ai.BoardPositionValues.aiPawnPos
+import ai_engine.ai.BoardPositionValues.bishopPositionValue
+import ai_engine.ai.BoardPositionValues.bishopValue
+import ai_engine.ai.BoardPositionValues.kingPos
+import ai_engine.ai.BoardPositionValues.knightPositionValue
+import ai_engine.ai.BoardPositionValues.knightValue
+import ai_engine.ai.BoardPositionValues.pawnValue
+import ai_engine.ai.BoardPositionValues.queenPos
+import ai_engine.ai.BoardPositionValues.queenValue
+import ai_engine.ai.BoardPositionValues.rookPos
+import ai_engine.ai.BoardPositionValues.rookValue
 import ai_engine.board.BoardData
 import ai_engine.board.BoardLogic
 import ai_engine.board.pieces.enums.PieceColor
@@ -24,7 +24,7 @@ class ChessAI(
     private val boardData: BoardData
 ) {
     fun getTheNextStep(): Pair<Piece?, Pair<Int, Int>> {
-        minMax(boardData, originalDepth, true, -6000000, 7000000)
+        minMax(boardData, originalDepth, true, Int.MIN_VALUE, Int.MAX_VALUE)
 
         return bestChoice
     }
@@ -45,34 +45,32 @@ class ChessAI(
         var min = Int.MAX_VALUE
         val boardLogic = BoardLogic(boardData)
 
-        var stepsForAi = boardLogic.getMovesWithPiece(aiColor)
-        var stepsForOppositeColor = boardLogic.getMovesWithPiece(aiColor.oppositeColor())
+        val stepsForAi = boardLogic.getMovesWithPiece(aiColor)
+        val stepsForOppositeColor = boardLogic.getMovesWithPiece(aiColor.oppositeColor())
 
         if (depth == 0) return boardEvaluator(boardData)
 
         // ai loses
         if (stepsForAi.isEmpty()) {
-            return -90000
+            return Int.MIN_VALUE
         }
 
         // ai wins
         if (stepsForOppositeColor.isEmpty()) {
-            return 50000
+            return Int.MAX_VALUE
         }
 
         if (maximizing) {
 
-            val steps = stepsForAi
-            for (i in steps.indices) {
+            for (i in stepsForAi.indices) {
                 //save current branch
                 if (depth == originalDepth) {
-                    branch = steps[i]
+                    branch = stepsForAi[i]
                 }
                 //init new board
-                val tmp = BoardLogic(BoardData(boardData.toString()))
-                val tmpPiece = tmp.board.getPiece(steps[i].first.position)
-                tmp.board.movePiece(tmpPiece, steps[i].second)
-                //Log.d("MAX", "\n${boardEvaluator(tmp)}\n${tmp.printBoard()}\n")
+                val tmp = BoardData(boardData.toString()).boardLogic
+                val tmpPiece = tmp.board.getPiece(stepsForAi[i].first.position)
+                tmp.board.movePiece(tmpPiece, stepsForAi[i].second)
                 //new board eval
                 val value = minMax(tmp.board, depth - 1, false, alpha, beta)
                 max = max(value, max)

@@ -1,6 +1,6 @@
 package ai_engine.ai
 
-object boardPositionValues {
+object BoardPositionValues {
     const val pawnValue = 100
     const val bishopValue = 300
     const val knightValue = 300

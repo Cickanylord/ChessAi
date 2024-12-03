@@ -198,7 +198,7 @@ class BoardLogic(val board: BoardData) {
                             board.movePiece(null, move.copy(first = move.first + 1))
                         }
                         PieceColor.BLACK -> {
-                            board.movePiece(null, move.copy(second = move.first - 1))
+                            board.movePiece(null, move.copy(first = move.first - 1))
                         }
                     }
                 }
@@ -283,12 +283,11 @@ class BoardLogic(val board: BoardData) {
     private fun scanBoardForCheck(color: PieceColor, boardLogic: BoardLogic = this): Boolean {
         // Get the position of the king for the current player
         val kingPosition = boardLogic.board.getKing(color).position
-
         // Get all opponent pieces
         val opponentPieces = boardLogic.board.getPiecesByColor(color.oppositeColor())
-
         // Iterate through each opponent's piece
         for (piece in opponentPieces) {
+            //all possible move of opponent
             val allMoves = piece.getAllMoves()
             // Check if the piece has any moves that can target the king
             if (allMoves.flatMap { it }.contains(kingPosition)) {
@@ -301,7 +300,6 @@ class BoardLogic(val board: BoardData) {
                 }
             }
         }
-
         // No opponent pieces can attack the king
         return false
     }
